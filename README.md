@@ -220,44 +220,4 @@ MediSathi AI is designed particularly for:
    npm install
    ```
 
-3. **Configure Environment Variables:**
-   Copy `.env.example` to `.env` and fill in your Twilio credentials:
-   ```env
-   TWILIO_ACCOUNT_SID=your_account_sid_here
-   TWILIO_AUTH_TOKEN=your_auth_token_here
-   TWILIO_PHONE_NUMBER=+17372508034
-   PORT=10000
-   ```
 
-4. **Start Development Server:**
-   ```bash
-   npm run dev
-   ```
-   Open `http://localhost:5173` in your browser.
-
-5. **Build and Run Production Server:**
-   ```bash
-   npm run build
-   npm run start
-   ```
-
----
-
-## 🌐 Deploying on Render
-
-1. Create a new **Web Service** on [Render](https://render.com) connected to this repository.
-2. Configure the build & start settings:
-   - **Runtime:** `Node`
-   - **Root Directory:** *(Leave blank)*
-   - **Build Command:** `npm install && npm run build`
-   - **Start Command:** `node server.js`
-3. Add your Twilio environment variables under Render **Settings ➔ Environment**:
-   - `TWILIO_ACCOUNT_SID`
-   - `TWILIO_AUTH_TOKEN`
-   - `TWILIO_PHONE_NUMBER`
-
----
-
-## ⚠️ Medical Disclaimer
-
-MediSathi AI is a health-technology prototype intended for healthcare-information assistance and organization. It is not a substitute for professional medical diagnosis, treatment, or clinical advice. Always consult a qualified physician or healthcare professional for medical decisions.
