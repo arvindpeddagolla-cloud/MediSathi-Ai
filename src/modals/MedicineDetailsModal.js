@@ -77,14 +77,24 @@ export function renderMedicineDetailsModal(state) {
             <p class="text-[12px] text-on-surface font-semibold">${med.doctor || 'Dr. K. S. Rao, MD (Apollo Hospital)'}</p>
           </div>
 
-          <!-- Voice Instruction Button -->
-          <button 
-            class="w-full py-2.5 px-3 rounded-xl bg-secondary-container text-on-secondary-container font-bold text-[12px] flex items-center justify-center gap-1.5 shadow-xs active:scale-95 transition-all"
-            onclick="window.playMedicineVoiceInstruction('${med.name}', '${med.strength}', '${med.instructionTe}')"
-          >
-            <span class="material-symbols-outlined text-[17px]">volume_up</span>
-            <span>Listen Instructions in Telugu / English</span>
-          </button>
+          <!-- Voice & SMS Action Grid -->
+          <div class="grid grid-cols-2 gap-2">
+            <button 
+              class="py-2.5 px-2 rounded-xl bg-secondary-container text-on-secondary-container font-bold text-[11px] flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-all"
+              onclick="window.playMedicineVoiceInstruction('${med.name}', '${med.strength}', '${med.instructionTe}')"
+            >
+              <span class="material-symbols-outlined text-[16px]">volume_up</span>
+              <span>Listen Telugu</span>
+            </button>
+
+            <button 
+              class="py-2.5 px-2 rounded-xl bg-primary text-on-primary font-bold text-[11px] flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-all hover:bg-primary-container"
+              onclick="window.triggerMedicineReminder('${med.id}')"
+            >
+              <span class="material-symbols-outlined text-[16px]">sms</span>
+              <span>Send Live SMS</span>
+            </button>
+          </div>
 
           <!-- Primary Actions -->
           <div class="pt-1 space-y-2">

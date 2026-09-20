@@ -245,6 +245,34 @@ export function renderMedicinesView(state) {
                     </span>
                   </div>
 
+                  <!-- Per-Medicine Instant Trigger & Timing Controls -->
+                  <div class="flex items-center justify-between pt-1 border-t border-surface-container-high/40 text-[11px]">
+                    <div class="flex items-center gap-1.5">
+                      <button 
+                        class="px-2.5 py-1 rounded-lg bg-primary-fixed/40 hover:bg-primary-fixed text-primary font-bold text-[10px] flex items-center gap-1 active:scale-95 transition-all border border-primary/30"
+                        onclick="window.triggerMedicineReminder('${med.id}')"
+                        title="Send Real Twilio SMS for ${med.name} ${med.strength}"
+                      >
+                        <span class="material-symbols-outlined text-[13px]">sms</span>
+                        <span>Trigger SMS</span>
+                      </button>
+
+                      <button 
+                        class="px-2 py-1 rounded-lg bg-secondary-container/40 hover:bg-secondary-container text-secondary font-bold text-[10px] flex items-center gap-1 active:scale-95 transition-all"
+                        onclick="window.startDemoCountdown('${med.id}', 5)"
+                        title="Test automated trigger in 5 seconds"
+                      >
+                        <span class="material-symbols-outlined text-[13px]">timer</span>
+                        <span>5s Test</span>
+                      </button>
+                    </div>
+
+                    <span class="text-[10px] text-on-surface-variant font-semibold flex items-center gap-0.5">
+                      <span class="material-symbols-outlined text-[12px] text-primary">alarm</span>
+                      <span>Due: ${med.time}</span>
+                    </span>
+                  </div>
+
                   <!-- Status Banner and Interactive Buttons -->
                   ${isDone ? `
                     <div class="flex items-center justify-between pt-1 border-t border-surface-container-high/40">
@@ -289,9 +317,9 @@ export function renderMedicinesView(state) {
                         <span class="material-symbols-outlined text-[15px] text-outline">schedule</span>
                         <span>${t('upcomingEvening', lang)}</span>
                       </span>
-                      <button class="h-8 px-3 rounded-full bg-surface-container-high text-primary text-[11px] font-bold flex items-center gap-1 active:scale-95" type="button" onclick="window.showToast('Reminder alert set for ${med.time}', 'info')">
-                        <span class="material-symbols-outlined text-[14px]">notifications</span>
-                        <span>${t('setAlert', lang)}</span>
+                      <button class="h-8 px-3 rounded-full bg-surface-container-high text-primary text-[11px] font-bold flex items-center gap-1 active:scale-95" type="button" onclick="window.triggerMedicineReminder('${med.id}')">
+                        <span class="material-symbols-outlined text-[14px]">notifications_active</span>
+                        <span>Trigger Now</span>
                       </button>
                     </div>
                   `)}

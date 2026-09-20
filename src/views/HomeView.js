@@ -136,6 +136,31 @@ export function renderHomeView(state) {
           <span>${t('doseDesc', lang)}</span>
         </p>
 
+        <!-- Tablet Specific Trigger Bar -->
+        <div class="flex items-center justify-between p-2 rounded-xl bg-surface-container-low border border-surface-container-high/40 text-[11px] mb-2">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-primary animate-ping shrink-0"></span>
+            <span class="text-[10px] text-on-surface font-bold truncate">Due: ${primaryMed.time} (${primaryMed.slot})</span>
+          </div>
+          <div class="flex items-center gap-1 shrink-0">
+            <button 
+              class="px-2 py-0.5 rounded-lg bg-primary text-on-primary font-bold text-[10px] shadow-xs active:scale-95 transition-all flex items-center gap-1"
+              onclick="window.triggerMedicineReminder('${primaryMed.id}')"
+              title="Trigger Real SMS for ${primaryMed.name}"
+            >
+              <span class="material-symbols-outlined text-[12px]">sms</span>
+              <span>Trigger SMS</span>
+            </button>
+            <button 
+              class="px-2 py-0.5 rounded-lg bg-surface-container text-secondary font-bold text-[10px] active:scale-95 transition-all"
+              onclick="window.startDemoCountdown('${primaryMed.id}', 5)"
+              title="Test reminder in 5 seconds"
+            >
+              5s Timer
+            </button>
+          </div>
+        </div>
+
         <!-- Interactive Dose Buttons -->
         ${!isTaken ? `
           <div class="grid grid-cols-2 gap-2" id="home-dose-actions">

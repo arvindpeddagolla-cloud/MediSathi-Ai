@@ -22,8 +22,22 @@ import { renderVoiceCallModal } from './modals/VoiceCallModal.js';
 import { renderMedicineDetailsModal } from './modals/MedicineDetailsModal.js';
 import { renderCalendarPickerModal } from './modals/CalendarPickerModal.js';
 
+// Scheduler & Tablet-based Trigger Engine
+import { 
+  triggerMedicineReminder, 
+  startDemoCountdown, 
+  formatMedicineSms, 
+  startActiveScheduler 
+} from './utils/scheduler.js';
+
 // Expose Global Helper Handlers on window
 window.showToast = showToast;
+window.triggerMedicineReminder = triggerMedicineReminder;
+window.startDemoCountdown = startDemoCountdown;
+window.formatMedicineSms = formatMedicineSms;
+
+// Start active background timing scheduler
+startActiveScheduler();
 
 window.navigateTab = (tabId) => {
   store.setActiveTab(tabId);
