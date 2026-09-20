@@ -19,10 +19,48 @@ export function formatMedicineSms(med) {
   return (
     `Reminder: It’s time to take your scheduled medicine.\n` +
     `Medicine: ${med.name} ${med.strength}\n` +
-    `Timing: ${med.time} (${med.slot})\n` +
+    `Timing: ${med.time} (${med.slot || 'Scheduled'})\n` +
     `Instruction: ${instructionText}${instructionTe}\n` +
     `Please take it as prescribed by your doctor.`
   );
+}
+
+// Parse various time string representations into { hours, minutes } 24-hour format
+export function parseTimeString(timeStr) {
+  if (!timeStr || typeof timeStr !== 'string') return null;
+  const str = timeStr.trim();
+
+  // Pattern: "09:00 AM", "9:00 PM", "1:15pm", "9am", etc.
+  const ampmMatch = str.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM|am|pm)$/i);
+  if (ampmMatch) {
+    let hours = parseInt(ampmMatch[1], 10);
+    const minutes = ampmMatch[2] ? parseInt(ampmMatch[2], 10) : 0;
+    const isPM = ampmMatch[3].toUpperCase() === 'PM';
+
+    if (isPM && hours < 12) hours += 12;
+    if (!isPM && hours === 12) hours = 0;
+    return { hours, minutes };
+  }
+
+  // Pattern: "14:30", "09:00", "9:00" (24-hour or 12-hour without AM/PM)
+  const plainMatch = str.match(/^(\d{1,2}):(\d{2})$/);
+  if (plainMatch) {
+    const hours = parseInt(plainMatch[1], 10);
+    const minutes = parseInt(plainMatch[2], 10);
+    if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+      return { hours, minutes };
+    }
+  }
+
+  return null;
+}
+
+// Convert 24-hour {hours, minutes} to standard display "09:00 AM" format
+export function formatToAmPm(hours, minutes) {
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const displayHours = (hours % 12 || 12).toString().padStart(2, '0');
+  const displayMinutes = minutes.toString().padStart(2, '0');
+  return `${displayHours}:${displayMinutes} ${ampm}`;
 }
 
 // Trigger real Twilio SMS and In-App Alarm for a specific medicine
@@ -37,9 +75,9 @@ export async function triggerMedicineReminder(medIdOrObject, targetPhone = '+918
   }
 
   const smsText = formatMedicineSms(med);
-  showToast(`⏰ Triggering reminder for ${med.name} ${med.strength}...`, 'info', 2000);
+  showToast(`⏰ Scheduled Reminder Triggered: ${med.name} ${med.strength}`, 'info', 3000);
 
-  // 1. Play Audio Chime & Trigger Voice Announcement
+  // 1. Play Audio Chime & Trigger Telugu/English Voice Announcement
   speech.playChime('reminder');
   setTimeout(() => {
     const teInstruction = med.instructionTe || 'ఆహారం తర్వాత తీసుకోవాలి';
@@ -52,7 +90,7 @@ export async function triggerMedicineReminder(medIdOrObject, targetPhone = '+918
   // 2. Open Alarm Modal for this medicine
   store.openMedicineDetails(med);
 
-  // 3. Send Real Live Twilio SMS
+  // 3. Send Real Live Twilio SMS to user's mobile
   try {
     const res = await fetch('/api/send-sms', {
       method: 'POST',
@@ -62,25 +100,26 @@ export async function triggerMedicineReminder(medIdOrObject, targetPhone = '+918
         body: smsText,
         medicineName: med.name,
         strength: med.strength,
-        instruction: med.instruction
+        instruction: med.instruction,
+        timing: med.time
       })
     });
     
     const data = await res.json();
     if (data.sid) {
       speech.playChime('success');
-      showToast(`✓ Twilio SMS Sent for ${med.name} ${med.strength}! SID: ${data.sid.slice(0, 10)}...`, 'success', 5000);
+      showToast(`✓ Twilio SMS Sent to ${targetPhone}! SID: ${data.sid.slice(0, 10)}...`, 'success', 5000);
       return data;
     } else {
-      showToast(`Twilio SMS Notice: ${data.message || 'SMS processed'}`, 'info', 4000);
+      showToast(`Twilio SMS Status: ${data.message || 'Processed'}`, 'info', 4000);
     }
   } catch (err) {
-    console.warn('SMS Network notice:', err);
-    showToast(`Reminder simulated for ${med.name} ${med.strength}`, 'info', 3000);
+    console.warn('SMS API notice:', err);
+    showToast(`Reminder alert triggered for ${med.name} ${med.strength}`, 'info', 3000);
   }
 }
 
-// Active Clock Scheduler Engine: Checks timings every 30 seconds
+// Active Clock Scheduler Engine: Checks timings every 2 seconds for high precision
 let schedulerInterval = null;
 const firedToday = new Set();
 
@@ -89,24 +128,27 @@ export function startActiveScheduler() {
 
   schedulerInterval = setInterval(() => {
     const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    const formattedHours = (hours % 12 || 12).toString().padStart(2, '0');
-    const formattedMinutes = minutes.toString().padStart(2, '0');
-    const currentTimeStr = `${formattedHours}:${formattedMinutes} ${ampm}`;
+    const curHours = now.getHours();
+    const curMinutes = now.getMinutes();
+    const dateKey = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
 
-    // Check if any medication matches current time
     store.state.medications.forEach(med => {
-      if (med.time === currentTimeStr && !firedToday.has(`${med.id}-${currentTimeStr}`)) {
-        firedToday.add(`${med.id}-${currentTimeStr}`);
-        triggerMedicineReminder(med);
+      const parsed = parseTimeString(med.time);
+      if (parsed) {
+        if (parsed.hours === curHours && parsed.minutes === curMinutes) {
+          const fireKey = `${med.id}-${dateKey}-${curHours}-${curMinutes}`;
+          if (!firedToday.has(fireKey)) {
+            firedToday.add(fireKey);
+            console.log(`[Scheduler] Clock match for ${med.name} (${med.time}) -> Triggering SMS!`);
+            triggerMedicineReminder(med);
+          }
+        }
       }
     });
-  }, 30000);
+  }, 2000);
 }
 
-// Quick Countdown Timer for judges & instant demo
+// Quick Countdown Timer for demo / instant testing
 let countdownTimer = null;
 
 export function startDemoCountdown(medId, seconds = 5) {
@@ -114,12 +156,12 @@ export function startDemoCountdown(medId, seconds = 5) {
 
   const med = store.state.medications.find(m => m.id === medId) || store.state.medications[0];
   let remaining = seconds;
-  showToast(`⏱️ Timer set: ${med.name} reminder in ${remaining}s...`, 'info', 1500);
+  showToast(`⏱️ Countdown set: ${med.name} SMS in ${remaining}s...`, 'info', 1500);
 
   countdownTimer = setInterval(() => {
     remaining -= 1;
     if (remaining > 0) {
-      showToast(`⏱️ ${med.name} reminder in ${remaining}s...`, 'info', 1000);
+      showToast(`⏱️ ${med.name} SMS trigger in ${remaining}s...`, 'info', 1000);
     } else {
       clearInterval(countdownTimer);
       triggerMedicineReminder(med);

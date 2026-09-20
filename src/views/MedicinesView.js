@@ -408,15 +408,24 @@ export function renderMedicinesView(state) {
         </div>
       </div>
 
-      <!-- Sticky Floating Action Button: Add / Scan New Medicine -->
-      <div class="w-full pt-1 pb-2">
+      <!-- Action Buttons: Create Reminder & Scan Prescription -->
+      <div class="grid grid-cols-2 gap-2 pt-1 pb-2">
         <button 
-          class="w-full h-12 rounded-full bg-primary text-on-primary shadow-lg flex items-center justify-center gap-2 active:scale-98 transition-all hover:bg-primary-container font-bold text-[14px]" 
+          class="h-12 rounded-2xl bg-primary text-on-primary shadow-md flex items-center justify-center gap-1.5 active:scale-98 transition-all hover:bg-primary-container font-bold text-[13px]" 
+          type="button"
+          onclick="window.openCreateReminderModal()"
+        >
+          <span class="material-symbols-outlined text-[18px]">alarm_add</span>
+          <span>+ Create Reminder</span>
+        </button>
+
+        <button 
+          class="h-12 rounded-2xl bg-secondary-container text-on-secondary-container shadow-sm flex items-center justify-center gap-1.5 active:scale-98 transition-all hover:bg-secondary-container/80 font-bold text-[13px]" 
           type="button"
           onclick="window.openScannerModal()"
         >
-          <span class="material-symbols-outlined text-[20px]">document_scanner</span>
-          <span>${t('addScanMedicine', lang)}</span>
+          <span class="material-symbols-outlined text-[18px]">document_scanner</span>
+          <span>Scan Rx</span>
         </button>
       </div>
 

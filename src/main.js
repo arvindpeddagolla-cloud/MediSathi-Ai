@@ -21,6 +21,7 @@ import { renderSMSExperienceModal } from './modals/SMSExperienceModal.js';
 import { renderVoiceCallModal } from './modals/VoiceCallModal.js';
 import { renderMedicineDetailsModal } from './modals/MedicineDetailsModal.js';
 import { renderCalendarPickerModal } from './modals/CalendarPickerModal.js';
+import { renderCreateReminderModal } from './modals/CreateReminderModal.js';
 
 // Scheduler & Tablet-based Trigger Engine
 import { 
@@ -111,6 +112,10 @@ window.openVoiceCallModal = () => {
 
 window.openCalendarModal = () => {
   store.openModal('calendarPicker');
+};
+
+window.openCreateReminderModal = () => {
+  store.openModal('createReminder');
 };
 
 window.openMedicineDetailsById = (medId) => {
@@ -215,6 +220,8 @@ function renderApp(state) {
     modalHtml = renderMedicineDetailsModal(state);
   } else if (state.activeModal === 'calendarPicker') {
     modalHtml = renderCalendarPickerModal(state);
+  } else if (state.activeModal === 'createReminder') {
+    modalHtml = renderCreateReminderModal(state);
   }
 
   root.innerHTML = `

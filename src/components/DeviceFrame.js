@@ -8,6 +8,16 @@ export function renderDemoControls(state) {
       <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
         <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px] mr-0.5 shrink-0">Demo:</span>
         
+        <!-- Create Reminder Shortcut -->
+        <button 
+          onclick="window.openCreateReminderModal()" 
+          class="px-2.5 py-1 rounded-lg bg-primary text-on-primary font-bold text-[11px] flex items-center gap-1 shrink-0 active:scale-95 transition-all shadow-xs"
+          title="Create New Scheduled Medication Reminder"
+        >
+          <span class="material-symbols-outlined text-[14px]">alarm_add</span>
+          <span>+ New Reminder</span>
+        </button>
+        
         <!-- Paracetamol 9AM Trigger -->
         <button 
           onclick="window.triggerMedicineReminder('med-1')" 
