@@ -2,12 +2,19 @@ import { store } from '../state/store.js';
 import { t } from '../utils/i18n.js';
 import { speech } from '../utils/speech.js';
 import { showToast } from '../components/Toast.js';
-import { triggerMedicineReminder, startDemoCountdown, formatToAmPm } from '../utils/scheduler.js';
+import { 
+  triggerMedicineReminder, 
+  startDemoCountdown, 
+  formatToAmPm, 
+  scheduleMedicationTimer,
+  getSecondsUntilTime,
+  parseTimeString 
+} from '../utils/scheduler.js';
 
 export function renderCreateReminderModal(state) {
   const lang = state.currentLanguage;
 
-  // Calculate current time + 1 min and + 2 min for quick one-click scheduling
+  // Calculate current time + 10s, + 30s, + 1 min and + 2 min for quick one-click scheduling
   const now = new Date();
   const nowPlus1 = new Date(now.getTime() + 60000);
   const nowPlus2 = new Date(now.getTime() + 120000);
@@ -113,7 +120,7 @@ export function renderCreateReminderModal(state) {
             <div class="space-y-1.5" id="custom-time-picker-container">
               <div class="flex items-center justify-between">
                 <label class="text-[11px] text-on-surface-variant font-bold uppercase tracking-wider block">
-                  Scheduled Trigger Time (Clock Alarm &amp; SMS)
+                  Scheduled Trigger Time (Alarm &amp; SMS)
                 </label>
                 <span class="text-[10px] text-primary font-bold">Current: ${currentStr}</span>
               </div>
@@ -303,8 +310,13 @@ window.handleCreateReminderAndSend = async (sendImmediateSms = false) => {
     purposeTe: 'షెడ్యూల్ చేయబడిన మందుల రిమైండర్'
   });
 
+  // Explicitly register with active scheduler
+  scheduleMedicationTimer(newMed);
+
   speech.playChime('success');
   store.closeModal();
+
+  const lang = (store && store.state) ? store.state.currentLanguage : 'en';
 
   if (sendImmediateSms) {
     showToast(`✓ Reminder scheduled! Triggering immediate SMS & alarm to ${targetPhone}...`, 'info', 3000);
@@ -312,15 +324,22 @@ window.handleCreateReminderAndSend = async (sendImmediateSms = false) => {
       triggerMedicineReminder(newMed, targetPhone);
     }, 400);
   } else {
-    showToast(`✓ Scheduled reminder created for ${name} ${strength} at ${time}!`, 'success', 4000);
+    const parsed = parseTimeString(time);
+    let diffSeconds = parsed ? getSecondsUntilTime(parsed.hours, parsed.minutes) : 0;
+    
+    if (diffSeconds > 0 && diffSeconds <= 120) {
+      showToast(`✓ Scheduled reminder for ${name} ${strength} at ${time} (alarm in ${diffSeconds}s)! ⏰`, 'success', 5000);
+    } else {
+      showToast(`✓ Scheduled reminder created for ${name} ${strength} at ${time}! ⏰`, 'success', 4000);
+    }
+
     setTimeout(() => {
-      const lang = store.getState().currentLanguage;
       if (lang === 'te') {
         speech.speak(`${name} ${strength} రిమైండర్ సమయం: ${time}. షెడ్యూల్ చేయబడింది.`, 'te');
       } else {
         speech.speak(`${name} ${strength} reminder scheduled for ${time}.`, 'en');
       }
-    }, 400);
+    }, 300);
   }
 };
 
@@ -359,3 +378,4 @@ window.handleCreateReminderAndCountdown = async (seconds = 5) => {
   // Start demo countdown
   startDemoCountdown(newMed.id, seconds, targetPhone);
 };
+

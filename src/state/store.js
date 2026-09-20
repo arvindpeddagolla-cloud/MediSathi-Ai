@@ -215,6 +215,10 @@ class Store {
     this.listeners = [];
   }
 
+  getState() {
+    return this.state;
+  }
+
   subscribe(listener) {
     this.listeners.push(listener);
     return () => {
