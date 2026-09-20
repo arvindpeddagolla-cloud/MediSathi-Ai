@@ -245,7 +245,7 @@ export function renderMedicinesView(state) {
                     </span>
                   </div>
 
-                  <!-- Per-Medicine Instant Trigger & Timing Controls -->
+                  <!-- Per-Medicine Instant Trigger, Timing & Delete Controls -->
                   <div class="flex items-center justify-between pt-1 border-t border-surface-container-high/40 text-[11px]">
                     <div class="flex items-center gap-1.5">
                       <button 
@@ -257,20 +257,20 @@ export function renderMedicinesView(state) {
                         <span>Trigger SMS</span>
                       </button>
 
-                      <button 
-                        class="px-2 py-1 rounded-lg bg-secondary-container/40 hover:bg-secondary-container text-secondary font-bold text-[10px] flex items-center gap-1 active:scale-95 transition-all"
-                        onclick="window.startDemoCountdown('${med.id}', 5)"
-                        title="Test automated trigger in 5 seconds"
-                      >
-                        <span class="material-symbols-outlined text-[13px]">timer</span>
-                        <span>5s Test</span>
-                      </button>
+                      <span class="text-[10px] text-on-surface-variant font-semibold flex items-center gap-0.5">
+                        <span class="material-symbols-outlined text-[12px] text-primary">alarm</span>
+                        <span>Due: ${med.time}</span>
+                      </span>
                     </div>
 
-                    <span class="text-[10px] text-on-surface-variant font-semibold flex items-center gap-0.5">
-                      <span class="material-symbols-outlined text-[12px] text-primary">alarm</span>
-                      <span>Due: ${med.time}</span>
-                    </span>
+                    <!-- Delete Reminder Action -->
+                    <button 
+                      class="w-7 h-7 rounded-lg bg-surface-container hover:bg-error/10 text-on-surface-variant hover:text-error flex items-center justify-center active:scale-95 transition-all"
+                      onclick="window.handleDeleteMedicine('${med.id}')"
+                      title="Delete ${med.name} reminder"
+                    >
+                      <span class="material-symbols-outlined text-[16px]">delete_outline</span>
+                    </button>
                   </div>
 
                   <!-- Status Banner and Interactive Buttons -->

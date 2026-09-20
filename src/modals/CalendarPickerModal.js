@@ -201,14 +201,24 @@ export function renderCalendarPickerModal(state) {
                     </div>
                   </div>
                   
-                  <button 
-                    class="px-2 py-1 rounded-lg bg-primary text-on-primary text-[10px] font-bold shadow-xs active:scale-95 transition-all flex items-center gap-0.5 shrink-0"
-                    onclick="window.triggerMedicineReminder('${m.id}')"
-                    title="Send SMS"
-                  >
-                    <span class="material-symbols-outlined text-[12px]">sms</span>
-                    <span>SMS</span>
-                  </button>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <button 
+                      class="px-2 py-1 rounded-lg bg-primary text-on-primary text-[10px] font-bold shadow-xs active:scale-95 transition-all flex items-center gap-0.5"
+                      onclick="window.triggerMedicineReminder('${m.id}')"
+                      title="Send SMS"
+                    >
+                      <span class="material-symbols-outlined text-[12px]">sms</span>
+                      <span>SMS</span>
+                    </button>
+
+                    <button 
+                      class="w-6 h-6 rounded-lg bg-surface-container hover:bg-error/10 text-on-surface-variant hover:text-error flex items-center justify-center active:scale-95 transition-all"
+                      onclick="window.handleDeleteMedicine('${m.id}')"
+                      title="Delete reminder"
+                    >
+                      <span class="material-symbols-outlined text-[14px]">delete_outline</span>
+                    </button>
+                  </div>
                 </div>
               `).join('')}
             </div>

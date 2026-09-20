@@ -307,6 +307,18 @@ class Store {
     }
   }
 
+  deleteMedication(medId) {
+    const med = this.state.medications.find(m => m.id === medId);
+    const medName = med ? `${med.name} ${med.strength}` : 'Medicine';
+    this.state.medications = this.state.medications.filter(m => m.id !== medId);
+    if (this.state.selectedMedicineForDetails && this.state.selectedMedicineForDetails.id === medId) {
+      this.state.selectedMedicineForDetails = null;
+      this.closeModal();
+    }
+    this.notify();
+    return medName;
+  }
+
   undoDose(medId) {
     const med = this.state.medications.find(m => m.id === medId);
     if (med) {

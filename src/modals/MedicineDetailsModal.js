@@ -115,6 +115,15 @@ export function renderMedicineDetailsModal(state) {
                 <span>Undo / Mark as Unconfirmed</span>
               </button>
             `}
+
+            <!-- Delete Reminder Button -->
+            <button 
+              class="w-full h-10 rounded-xl bg-error/10 hover:bg-error/20 text-error font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-98 transition-all border border-error/20"
+              onclick="window.handleDeleteMedicine('${med.id}')"
+            >
+              <span class="material-symbols-outlined text-[16px]">delete_forever</span>
+              <span>Delete Reminder (రిమైండర్ తొలగించు)</span>
+            </button>
           </div>
 
         </div>

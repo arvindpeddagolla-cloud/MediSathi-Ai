@@ -136,6 +136,14 @@ window.handleMarkTaken = (medId) => {
   showToast('Medication marked as TAKEN ✓', 'success');
 };
 
+window.handleDeleteMedicine = (medId) => {
+  const med = store.state.medications.find(m => m.id === medId);
+  const name = med ? `${med.name} ${med.strength}` : 'Medicine';
+  store.deleteMedication(medId);
+  speech.playChime('success');
+  showToast(`🗑️ Reminder for ${name} has been deleted.`, 'info', 3000);
+};
+
 window.handleSnoozeDose = (medId) => {
   store.snoozeDose(medId);
   showToast('Medication reminder snoozed for 15 minutes ⏰', 'info');

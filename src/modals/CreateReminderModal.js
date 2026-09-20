@@ -206,35 +206,15 @@ export function renderCreateReminderModal(state) {
           </div>
 
           <!-- Action Buttons -->
-          <div class="space-y-2 pt-1">
-            <!-- 1. Save and Auto-Trigger at Scheduled Time -->
+          <div class="pt-1">
+            <!-- Save and Auto-Trigger at Scheduled Time -->
             <button 
               type="button" 
               class="w-full h-12 rounded-2xl bg-primary text-on-primary font-bold text-[13px] flex items-center justify-center gap-2 shadow-md active:scale-98 transition-all hover:bg-primary-container"
               onclick="window.handleCreateReminderAndSend(false)"
             >
               <span class="material-symbols-outlined text-[18px]">alarm_on</span>
-              <span>Save &amp; Schedule SMS Trigger at Due Time</span>
-            </button>
-
-            <!-- 2. Save and Test 5-Second Countdown -->
-            <button 
-              type="button" 
-              class="w-full h-11 rounded-2xl bg-secondary-container text-on-secondary-container font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-98 transition-all hover:opacity-90"
-              onclick="window.handleCreateReminderAndCountdown(5)"
-            >
-              <span class="material-symbols-outlined text-[16px]">timer</span>
-              <span>Save &amp; Test Live SMS in 5 Seconds ⚡</span>
-            </button>
-
-            <!-- 3. Immediate SMS trigger -->
-            <button 
-              type="button" 
-              class="w-full h-10 rounded-2xl bg-surface-container-high text-on-surface font-semibold text-[11px] flex items-center justify-center gap-1.5 active:scale-98 transition-all hover:bg-surface-variant"
-              onclick="window.handleCreateReminderAndSend(true)"
-            >
-              <span class="material-symbols-outlined text-[16px]">send</span>
-              <span>Trigger Live SMS to +91 81068 90663 Right Now</span>
+              <span>Save &amp; Schedule Reminder</span>
             </button>
           </div>
 
