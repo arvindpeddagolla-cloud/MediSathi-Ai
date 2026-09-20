@@ -84,7 +84,7 @@ export function renderMedicineDetailsModal(state) {
               onclick="window.playMedicineVoiceInstruction('${med.name}', '${med.strength}', '${med.instructionTe}')"
             >
               <span class="material-symbols-outlined text-[16px]">volume_up</span>
-              <span>Listen Telugu</span>
+              <span>${lang === 'te' ? 'వాయిస్ వినండి' : 'Listen Voice'}</span>
             </button>
 
             <button 
@@ -92,7 +92,7 @@ export function renderMedicineDetailsModal(state) {
               onclick="window.triggerMedicineReminder('${med.id}')"
             >
               <span class="material-symbols-outlined text-[16px]">sms</span>
-              <span>Send Live SMS</span>
+              <span>${lang === 'te' ? 'SMS పంపు' : 'Send Live SMS'}</span>
             </button>
           </div>
 
@@ -104,7 +104,7 @@ export function renderMedicineDetailsModal(state) {
                 onclick="window.handleMarkTaken('${med.id}'); window.closeActiveModal();"
               >
                 <span class="material-symbols-outlined text-[18px]">check_circle</span>
-                <span>Mark as TAKEN (వేసుకున్నాను)</span>
+                <span>${lang === 'te' ? 'వేసుకున్నాను' : 'Mark as TAKEN'}</span>
               </button>
             ` : `
               <button 
@@ -112,7 +112,7 @@ export function renderMedicineDetailsModal(state) {
                 onclick="window.handleUndoDose('${med.id}'); window.closeActiveModal();"
               >
                 <span class="material-symbols-outlined text-[18px]">undo</span>
-                <span>Undo / Mark as Unconfirmed</span>
+                <span>${lang === 'te' ? 'రద్దు చేయి' : 'Undo / Mark as Unconfirmed'}</span>
               </button>
             `}
 
@@ -122,7 +122,7 @@ export function renderMedicineDetailsModal(state) {
               onclick="window.handleDeleteMedicine('${med.id}')"
             >
               <span class="material-symbols-outlined text-[16px]">delete_forever</span>
-              <span>Delete Reminder (రిమైండర్ తొలగించు)</span>
+              <span>${lang === 'te' ? 'రిమైండర్ తొలగించు' : 'Delete Reminder'}</span>
             </button>
           </div>
 

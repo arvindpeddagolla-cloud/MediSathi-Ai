@@ -4,10 +4,10 @@ import { t } from '../utils/i18n.js';
 export function renderHeader(state) {
   const lang = state.currentLanguage;
   const langLabels = {
-    en: 'EN | తెలుగు',
-    te: 'తెలుగు (TE)',
-    hi: 'हिंदी (HI)',
-    ta: 'தமிழ் (TA)'
+    en: 'English',
+    te: 'తెలుగు',
+    hi: 'हिंदी',
+    ta: 'தமிழ்'
   };
 
   const tabTitles = {

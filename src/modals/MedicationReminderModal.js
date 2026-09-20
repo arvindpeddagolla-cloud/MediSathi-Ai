@@ -30,8 +30,8 @@ export function renderMedicationReminderModal(state) {
           <span class="px-2.5 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-extrabold uppercase tracking-wider">
             Medication Reminder • ${med.time}
           </span>
-          <h2 class="text-[19px] font-extrabold mt-0.5 leading-tight">Time for Your Medicine</h2>
-          <p class="text-[11px] text-on-primary/85">మందు వేసుకునే సమయం అయింది</p>
+          <h2 class="text-[19px] font-extrabold mt-0.5 leading-tight">${lang === 'te' ? 'మందు వేసుకునే సమయం' : 'Time for Your Medicine'}</h2>
+          <p class="text-[11px] text-on-primary/85">${lang === 'te' ? 'దయచేసి సమయానికి మందు తీసుకోండి' : 'Please take as prescribed by doctor'}</p>
         </div>
 
         <!-- Medicine Information & Live Controls -->
@@ -43,7 +43,7 @@ export function renderMedicationReminderModal(state) {
             </div>
             <div class="min-w-0 flex-1">
               <h3 class="text-[16px] font-extrabold text-on-surface leading-tight">${med.name} ${med.strength}</h3>
-              <p class="text-[11px] text-primary font-bold">1 Dose • ${med.instruction} (${lang === 'te' ? med.instructionTe : 'ఆహారం తర్వాత'})</p>
+              <p class="text-[11px] text-primary font-bold">1 Dose • ${lang === 'te' ? (med.instructionTe || 'ఆహారం తర్వాత') : (med.instruction || 'After food')}</p>
             </div>
           </div>
 
@@ -55,7 +55,7 @@ export function renderMedicationReminderModal(state) {
                 <span>Voice Announcement</span>
               </div>
               <span class="px-2 py-0.2 rounded bg-secondary-container text-on-secondary-container text-[9px] font-bold">
-                Telugu / English
+                ${lang === 'te' ? 'తెలుగు వాయిస్' : 'Voice Alert'}
               </span>
             </div>
 
@@ -75,7 +75,7 @@ export function renderMedicationReminderModal(state) {
               onclick="window.playReminderAudio('${med.name}', '${med.strength}', '${med.instructionTe}')"
             >
               <span class="material-symbols-outlined text-[14px]">volume_up</span>
-              <span>Replay Telugu / English Voice</span>
+              <span>${lang === 'te' ? 'వాయిస్ మళ్లీ వినండి' : 'Replay Voice Alert'}</span>
             </button>
           </div>
 
@@ -99,7 +99,7 @@ export function renderMedicationReminderModal(state) {
               onclick="window.handleReminderTaken('${med.id}')"
             >
               <span class="material-symbols-outlined text-[18px]">check_circle</span>
-              <span>TAKEN (వేసుకున్నాను)</span>
+              <span>${lang === 'te' ? 'వేసుకున్నాను' : 'TAKEN'}</span>
             </button>
 
             <button 
@@ -107,7 +107,7 @@ export function renderMedicationReminderModal(state) {
               onclick="window.handleReminderSnooze('${med.id}')"
             >
               <span class="material-symbols-outlined text-[16px]">schedule</span>
-              <span>REMIND ME LATER (15m Snooze)</span>
+              <span>${lang === 'te' ? 'తర్వాత గుర్తుచేయి' : 'REMIND ME LATER'}</span>
             </button>
           </div>
 

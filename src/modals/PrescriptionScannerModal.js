@@ -182,7 +182,7 @@ export function renderPrescriptionScannerModal(state) {
                 </div>
                 <div class="min-w-0 flex-1">
                   <span class="text-[10px] text-on-surface-variant uppercase tracking-wider block font-bold">${t('specialInstructions', lang)}</span>
-                  <span class="text-[13px] font-bold text-tertiary">After food (ఆహారం తర్వాత)</span>
+                  <span class="text-[13px] font-bold text-tertiary">${lang === 'te' ? 'ఆహారం తర్వాత' : (lang === 'hi' ? 'भोजन के बाद' : (lang === 'ta' ? 'உணவுக்குப் பின்' : 'After food'))}</span>
                 </div>
               </div>
             </div>
@@ -197,7 +197,7 @@ export function renderPrescriptionScannerModal(state) {
                 </div>
                 <div>
                   <h3 class="text-[15px] font-bold text-on-surface">✓ ${t('prescriptionConfirmed', lang)}</h3>
-                  <p class="text-[11px] text-tertiary font-bold">Active in Telugu &amp; English Reminders</p>
+                  <p class="text-[11px] text-tertiary font-bold">${lang === 'te' ? 'వాయిస్ & SMS రిమైండర్ సిద్ధం' : 'Active in Voice & SMS Reminders'}</p>
                 </div>
               </div>
               <p class="text-[12px] text-on-surface-variant leading-snug">
@@ -206,7 +206,7 @@ export function renderPrescriptionScannerModal(state) {
               <div class="p-2 rounded-xl bg-surface/90 flex items-center justify-between">
                 <div class="flex items-center gap-1.5 min-w-0">
                   <span class="material-symbols-outlined text-secondary text-[16px] animate-pulse">volume_up</span>
-                  <span class="text-[11px] text-on-surface truncate">First dose: <strong>8:30 PM (రాత్రి భోజనం తర్వాత)</strong></span>
+                  <span class="text-[11px] text-on-surface truncate">First dose: <strong>8:30 PM • ${lang === 'te' ? 'ఆహారం తర్వాత' : 'After food'}</strong></span>
                 </div>
                 <span class="material-symbols-outlined text-tertiary text-[18px]">notifications_active</span>
               </div>

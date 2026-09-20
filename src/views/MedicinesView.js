@@ -393,7 +393,7 @@ export function renderMedicinesView(state) {
               <div class="flex flex-col min-w-0">
                 <div class="flex items-center gap-1">
                   <span class="text-[13px] font-bold text-on-surface leading-snug">${t('voiceCallReminder', lang)}</span>
-                  <span class="px-1.5 py-0.2 rounded bg-surface-container text-secondary text-[10px] font-bold">తెలుగు / EN</span>
+                  <span class="px-1.5 py-0.2 rounded bg-surface-container text-secondary text-[10px] font-bold">${lang === 'te' ? 'తెలుగు' : 'Voice'}</span>
                 </div>
                 <span class="text-[10px] text-on-surface-variant truncate">${t('voiceCallDesc', lang)}</span>
               </div>

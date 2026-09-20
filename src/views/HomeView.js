@@ -28,7 +28,7 @@ export function renderHomeView(state) {
               ${t('greeting', lang)} <span class="ml-1 inline-block animate-bounce">👋</span>
             </span>
             <span class="text-[10px] px-2 py-0.2 rounded-full bg-secondary-container text-on-secondary-container font-bold">
-              ${lang === 'te' ? 'Good Morning' : 'శుభోదయం'}
+              ${lang === 'te' ? 'ఆరోగ్య స్థితి' : 'Daily Health'}
             </span>
           </div>
           <div class="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container shadow-xs border border-outline-variant/30">
@@ -384,7 +384,7 @@ export function renderHomeView(state) {
               <div>
                 <div class="flex items-center gap-1.5">
                   <h3 class="text-[14px] font-bold text-on-primary">${t('askAssistant', lang)}</h3>
-                  <span class="px-1.5 py-0.2 rounded-full bg-white/20 text-white text-[9px] font-bold">తెలుగు / EN</span>
+                  <span class="px-1.5 py-0.2 rounded-full bg-white/20 text-white text-[9px] font-bold">${lang === 'te' ? 'వాయిస్ AI' : 'Voice AI'}</span>
                 </div>
                 <p class="text-[10px] text-on-primary/85 leading-snug">${t('askAssistantSub', lang)}</p>
               </div>

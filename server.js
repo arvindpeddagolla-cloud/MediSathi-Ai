@@ -122,15 +122,15 @@ const server = http.createServer((req, res) => {
           return res.end(JSON.stringify({ error: err.message }));
         }
 
-        if (parsed && parsed.code === 572006 && msgBody !== 'sms_event_notifications') {
-          console.log('Twilio Free Trial template restriction (code 572006). Retrying with trial template trigger...');
-          sendTwilioRequest('sms_event_notifications', (err2, statusCode2, parsed2, rawBody2) => {
+        if (parsed && parsed.code === 572006 && msgBody !== 'sms_appointment_reminders') {
+          console.log('Twilio Free Trial template restriction (code 572006). Retrying with sms_appointment_reminders template...');
+          sendTwilioRequest('sms_appointment_reminders', (err2, statusCode2, parsed2, rawBody2) => {
             res.setHeader('Content-Type', 'application/json');
             res.statusCode = statusCode2 || 200;
             if (parsed2 && parsed2.sid) {
               parsed2.trialTemplateUsed = true;
               parsed2.medicineDetails = msgBody;
-              parsed2.notice = "Twilio Trial Account delivered trigger SMS. Upgrade Twilio account to deliver custom medicine text.";
+              parsed2.notice = "Twilio Trial Account delivered reminder SMS. To customize exact medicine text, upgrade your Twilio account.";
             }
             res.end(JSON.stringify(parsed2));
           });

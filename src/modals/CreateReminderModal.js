@@ -175,16 +175,16 @@ export function renderCreateReminderModal(state) {
             <!-- Food Instruction -->
             <div class="space-y-1">
               <label class="text-[11px] text-on-surface-variant font-bold uppercase tracking-wider block">
-                Food Instruction
+                ${lang === 'te' ? 'ఆహార సూచన' : 'Food Instruction'}
               </label>
               <select 
                 id="reminder-med-instruction" 
                 class="w-full p-2.5 rounded-xl bg-surface-container-low border border-surface-container-high text-[12px] font-bold text-on-surface focus:outline-none focus:border-primary"
               >
-                <option value="After food">After food (ఆహారం తర్వాత)</option>
-                <option value="Before food">Before food (ఆహారానికి ముందు)</option>
-                <option value="With food">With food (భోజనంతో పాటు)</option>
-                <option value="Empty stomach">Empty stomach (ఖాళీ కడుపుతో)</option>
+                <option value="After food">${lang === 'te' ? 'ఆహారం తర్వాత' : 'After food'}</option>
+                <option value="Before food">${lang === 'te' ? 'ఆహారానికి ముందు' : 'Before food'}</option>
+                <option value="With food">${lang === 'te' ? 'భోజనంతో పాటు' : 'With food'}</option>
+                <option value="Empty stomach">${lang === 'te' ? 'ఖాళీ కడుపుతో' : 'Empty stomach'}</option>
               </select>
             </div>
 
@@ -206,7 +206,7 @@ export function renderCreateReminderModal(state) {
           </div>
 
           <!-- Action Buttons -->
-          <div class="pt-1">
+          <div class="pt-1 space-y-2">
             <!-- Save and Auto-Trigger at Scheduled Time -->
             <button 
               type="button" 
@@ -216,6 +216,27 @@ export function renderCreateReminderModal(state) {
               <span class="material-symbols-outlined text-[18px]">alarm_on</span>
               <span>Save &amp; Schedule Reminder</span>
             </button>
+
+            <!-- Instant Live Test Options Grid -->
+            <div class="grid grid-cols-2 gap-2">
+              <button 
+                type="button" 
+                class="py-2.5 px-2 rounded-xl bg-tertiary-container text-on-tertiary-container font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-xs active:scale-95 hover:bg-tertiary-container/80 transition-all border border-tertiary/30"
+                onclick="window.handleCreateReminderAndCountdown(5)"
+              >
+                <span class="material-symbols-outlined text-[16px]">timer</span>
+                <span>Test in 5s</span>
+              </button>
+
+              <button 
+                type="button" 
+                class="py-2.5 px-2 rounded-xl bg-secondary-container text-on-secondary-container font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-xs active:scale-95 hover:bg-secondary-container/80 transition-all border border-secondary/30"
+                onclick="window.handleCreateReminderAndSend(true)"
+              >
+                <span class="material-symbols-outlined text-[16px]">send</span>
+                <span>Trigger SMS Now</span>
+              </button>
+            </div>
           </div>
 
           <!-- Active Reminders Count Banner -->
@@ -270,13 +291,14 @@ window.handleCreateReminderAndSend = async (sendImmediateSms = false) => {
   const instruction = instructionSelect ? instructionSelect.value : 'After food';
   const targetPhone = phoneInput ? phoneInput.value.trim() : '+918106890663';
 
-  // Add to store
+  // Add to store with targetPhone
   const newMed = store.addCustomScheduleMedicine({
     name: name,
     strength: strength,
     slot: slot,
     time: time,
     instruction: instruction,
+    targetPhone: targetPhone,
     purpose: 'Scheduled Medication Reminder',
     purposeTe: 'షెడ్యూల్ చేయబడిన మందుల రిమైండర్'
   });
@@ -284,20 +306,21 @@ window.handleCreateReminderAndSend = async (sendImmediateSms = false) => {
   speech.playChime('success');
   store.closeModal();
 
-  showToast(`✓ Scheduled reminder created for ${name} ${strength} at ${time}!`, 'success', 4000);
-
-  // Telugu voice announcement
-  setTimeout(() => {
-    speech.speak(
-      `${name} ${strength} రిమైండర్ సమయం: ${time}. షెడ్యూల్ చేయబడింది.`,
-      'te'
-    );
-  }, 400);
-
   if (sendImmediateSms) {
+    showToast(`✓ Reminder scheduled! Triggering immediate SMS & alarm to ${targetPhone}...`, 'info', 3000);
     setTimeout(() => {
       triggerMedicineReminder(newMed, targetPhone);
-    }, 600);
+    }, 400);
+  } else {
+    showToast(`✓ Scheduled reminder created for ${name} ${strength} at ${time}!`, 'success', 4000);
+    setTimeout(() => {
+      const lang = store.getState().currentLanguage;
+      if (lang === 'te') {
+        speech.speak(`${name} ${strength} రిమైండర్ సమయం: ${time}. షెడ్యూల్ చేయబడింది.`, 'te');
+      } else {
+        speech.speak(`${name} ${strength} reminder scheduled for ${time}.`, 'en');
+      }
+    }, 400);
   }
 };
 
@@ -323,6 +346,7 @@ window.handleCreateReminderAndCountdown = async (seconds = 5) => {
     slot: slot,
     time: time,
     instruction: instruction,
+    targetPhone: targetPhone,
     purpose: 'Scheduled Medication Reminder',
     purposeTe: 'షెడ్యూల్ చేయబడిన మందుల రిమైండర్'
   });
@@ -330,8 +354,8 @@ window.handleCreateReminderAndCountdown = async (seconds = 5) => {
   speech.playChime('success');
   store.closeModal();
 
-  showToast(`✓ Scheduled for ${time}. Starting ${seconds}s demo countdown...`, 'info', 2500);
+  showToast(`✓ Scheduled for ${time}. Starting ${seconds}s demo countdown to ${targetPhone}...`, 'info', 2500);
 
   // Start demo countdown
-  startDemoCountdown(newMed.id, seconds);
+  startDemoCountdown(newMed.id, seconds, targetPhone);
 };

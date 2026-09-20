@@ -94,7 +94,7 @@ export function renderProfileView(state) {
             class="p-2.5 rounded-xl border text-left transition-all flex flex-col ${lang === 'te' ? 'border-primary bg-primary-fixed/20 text-primary font-bold shadow-xs' : 'border-surface-container-high bg-surface-container-low text-on-surface'}"
             onclick="window.setLanguage('te')"
           >
-            <span class="text-[13px]">తెలుగు (Telugu)</span>
+            <span class="text-[13px]">తెలుగు</span>
             <span class="text-[9px] text-on-surface-variant">ప్రాధాన్య స్థానిక భాష</span>
           </button>
 
@@ -102,7 +102,7 @@ export function renderProfileView(state) {
             class="p-2.5 rounded-xl border text-left transition-all flex flex-col ${lang === 'hi' ? 'border-primary bg-primary-fixed/20 text-primary font-bold shadow-xs' : 'border-surface-container-high bg-surface-container-low text-on-surface'}"
             onclick="window.setLanguage('hi')"
           >
-            <span class="text-[13px]">हिंदी (Hindi)</span>
+            <span class="text-[13px]">हिंदी</span>
             <span class="text-[9px] text-on-surface-variant">राष्ट्रीय भाषा</span>
           </button>
 
@@ -110,7 +110,7 @@ export function renderProfileView(state) {
             class="p-2.5 rounded-xl border text-left transition-all flex flex-col ${lang === 'ta' ? 'border-primary bg-primary-fixed/20 text-primary font-bold shadow-xs' : 'border-surface-container-high bg-surface-container-low text-on-surface'}"
             onclick="window.setLanguage('ta')"
           >
-            <span class="text-[13px]">தமிழ் (Tamil)</span>
+            <span class="text-[13px]">தமிழ்</span>
             <span class="text-[9px] text-on-surface-variant">தமிழ் மொழி</span>
           </button>
         </div>

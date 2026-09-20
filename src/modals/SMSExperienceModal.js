@@ -73,15 +73,25 @@ export function renderSMSExperienceModal(state) {
                 <span>MediSathi AI Reminder</span>
               </div>
               
-              <p class="text-[13px] text-on-surface leading-relaxed whitespace-pre-line font-medium"><strong>Reminder:</strong> It’s time to take your scheduled medicine.
+              <p class="text-[13px] text-on-surface leading-relaxed whitespace-pre-line font-medium">${lang === 'te' ? 
+`రిమైండర్: మీ మందులు వేసుకునే సమయం అయింది.
 
-<strong>Medicine:</strong> Paracetamol 500 mg
-<strong>Instruction:</strong> After food (ఆహారం తర్వాత)
+మందు: పారాసిటమాల్ 500 mg
+సూచన: ఆహారం తర్వాత
+దయచేసి మీ డాక్టర్ సూచించిన విధంగా వేసుకోండి.
+
+సమాధానం ఇవ్వండి:
+1 - వేసుకున్నాను
+2 - తర్వాత గుర్తుచేయి` : 
+`Reminder: It’s time to take your scheduled medicine.
+
+Medicine: Paracetamol 500 mg
+Instruction: After food
 Please take it as prescribed by your doctor.
 
 Reply with:
-1 for Taken (వేసుకున్నాను)
-2 for Remind Later (తర్వాత గుర్తుచేయి)</p>
+1 for Taken
+2 for Remind Later`}</p>
 
               <span class="text-[10px] text-outline block text-right">09:00 AM • Delivered</span>
             </div>
@@ -103,18 +113,18 @@ Reply with:
           <div class="flex items-center gap-2">
             <button 
               class="flex-1 py-2 px-3 rounded-xl bg-tertiary-container/20 text-tertiary font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-95 border border-tertiary/30 hover:bg-tertiary-container/30 transition-all"
-              onclick="window.sendSmsReply('1 - Taken (వేసుకున్నాను)')"
+              onclick="window.sendSmsReply('${lang === 'te' ? '1 - వేసుకున్నాను' : '1 - Taken'}')"
             >
               <span class="material-symbols-outlined text-[16px]">check_circle</span>
-              <span>1 - Taken</span>
+              <span>${lang === 'te' ? '1 - వేసుకున్నాను' : '1 - Taken'}</span>
             </button>
 
             <button 
               class="flex-1 py-2 px-3 rounded-xl bg-surface-container text-on-surface font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-95 border border-outline-variant/30 hover:bg-surface-variant transition-all"
-              onclick="window.sendSmsReply('2 - Remind Later (15m)')"
+              onclick="window.sendSmsReply('${lang === 'te' ? '2 - తర్వాత గుర్తుచేయి' : '2 - Remind Later'}')"
             >
               <span class="material-symbols-outlined text-[16px]">schedule</span>
-              <span>2 - Remind Later</span>
+              <span>${lang === 'te' ? '2 - తర్వాత గుర్తుచేయి' : '2 - Remind Later'}</span>
             </button>
           </div>
 

@@ -148,9 +148,9 @@ export function renderCalendarPickerModal(state) {
                     id="new-med-instruction" 
                     class="w-full px-2.5 py-1.5 rounded-xl bg-surface-container-low border border-surface-container-high text-[12px] font-bold text-on-surface focus:outline-none focus:border-primary"
                   >
-                    <option value="After food">After food (ఆహారం తర్వాత)</option>
-                    <option value="Before food">Before food (ఆహారానికి ముందు)</option>
-                    <option value="With food">With food (భోజనంతో)</option>
+                    <option value="After food">${lang === 'te' ? 'ఆహారం తర్వాత' : 'After food'}</option>
+                    <option value="Before food">${lang === 'te' ? 'ఆహారానికి ముందు' : 'Before food'}</option>
+                    <option value="With food">${lang === 'te' ? 'భోజనంతో పాటు' : 'With food'}</option>
                   </select>
                 </div>
               </div>

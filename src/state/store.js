@@ -281,6 +281,11 @@ class Store {
     this.openModal('medDetails');
   }
 
+  openReminderAlarm(med) {
+    this.state.selectedMedicineForDetails = med;
+    this.openModal('reminder');
+  }
+
   selectReport(reportId) {
     this.state.selectedReportId = reportId;
     this.notify();
@@ -346,6 +351,7 @@ class Store {
       instructionTe: instructionTe,
       instructionHi: data.instructionHi || 'भोजन के बाद',
       instructionTa: data.instructionTa || 'உணவுக்குப் பின்',
+      targetPhone: data.targetPhone || '+918106890663',
       purpose: data.purpose || 'Doctor Prescribed Antibiotic / Care Treatment',
       purposeTe: data.purposeTe || 'వైద్యులు సూచించిన చికిత్స',
       doctor: data.doctor || 'Dr. K. S. Rao, MD',

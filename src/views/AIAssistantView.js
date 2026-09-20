@@ -47,7 +47,7 @@ export function renderAIAssistantView(state) {
 
         <button 
           class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-secondary text-[11px] font-bold shadow-xs whitespace-nowrap active:scale-95 border border-surface-container-high hover:border-secondary transition-all flex items-center gap-1 shrink-0"
-          onclick="window.sendSuggestedPrompt('Explain this report in Telugu (తెలుగులో వివరించండి)')"
+          onclick="window.sendSuggestedPrompt('${lang === 'te' ? 'ఈ రిపోర్ట్‌ను తెలుగులో వివరించండి' : 'Explain this report in simple terms'}')"
         >
           <span class="material-symbols-outlined text-[14px]">translate</span>
           <span>${t('suggestedQ3', lang)}</span>
@@ -61,12 +61,13 @@ export function renderAIAssistantView(state) {
             return `
               <div class="flex justify-end">
                 <div class="bg-primary text-on-primary rounded-2xl rounded-tr-xs p-2.5 shadow-xs max-w-[85%] text-[12px] font-medium leading-relaxed">
-                  ${msg.textEn}
+                  ${msg.textEn || msg.textTe}
                   <span class="text-[9px] text-white/70 block text-right mt-0.5">${msg.timestamp}</span>
                 </div>
               </div>
             `;
           } else {
+            const aiText = lang === 'te' ? (msg.textTe || msg.textEn) : (lang === 'hi' ? (msg.textHi || msg.textEn) : (lang === 'ta' ? (msg.textTa || msg.textEn) : msg.textEn));
             return `
               <div class="flex items-start gap-2">
                 <img 
@@ -83,7 +84,7 @@ export function renderAIAssistantView(state) {
                     </span>
                     
                     <!-- Live audio wave simulation -->
-                    <div class="flex items-center gap-0.5 h-3 cursor-pointer" onclick="window.speakAiMessage('${encodeURIComponent(msg.textTe || msg.textEn)}')">
+                    <div class="flex items-center gap-0.5 h-3 cursor-pointer" onclick="window.speakAiMessage('${encodeURIComponent(aiText)}')">
                       <span class="w-1 bg-secondary rounded-full h-2 animate-bounce"></span>
                       <span class="w-1 bg-secondary rounded-full h-3 animate-bounce" style="animation-delay: 0.15s"></span>
                       <span class="w-1 bg-secondary rounded-full h-1.5 animate-bounce" style="animation-delay: 0.3s"></span>
@@ -91,19 +92,10 @@ export function renderAIAssistantView(state) {
                     </div>
                   </div>
 
-                  <!-- Bilingual AI Response Content -->
-                  <div class="space-y-1.5">
-                    <div class="p-2 rounded-xl bg-surface-container text-on-surface space-y-0.5 text-[11px] border border-surface-container-high/40">
-                      <span class="text-[9px] font-extrabold text-secondary tracking-wider block">తెలుగు వివరణ</span>
-                      <p class="leading-relaxed font-medium">
-                        ${msg.textTe || 'ఈ రిపోర్ట్‌లో చూపించిన విలువ సాధారణ పరిమితి కంటే తక్కువగా ఉంది. మీ వైద్య నిపుణుడితో ఈ ఫలితాన్ని చర్చించండి.'}
-                      </p>
-                    </div>
-
-                    <p class="text-[11px] text-on-surface leading-relaxed">
-                      "${msg.textEn}"
-                    </p>
-                  </div>
+                  <!-- Clean Single-Language AI Response Content -->
+                  <p class="text-[12px] text-on-surface leading-relaxed font-medium">
+                    ${aiText}
+                  </p>
 
                   <!-- Adherence Citation & Safety Footer -->
                   <div class="flex items-center justify-between pt-1 text-[9px] text-outline font-semibold border-t border-surface-container-high/40">
@@ -225,8 +217,9 @@ window.toggleSpeechMic = () => {
     speech.playChime('reminder');
     setTimeout(() => {
       const input = document.getElementById('chat-user-input');
+      const lang = store.getState().currentLanguage;
       if (input) {
-        input.value = "మందు ఎప్పుడు వేసుకోవాలి? (When should I take my medicine?)";
+        input.value = lang === 'te' ? "మందు ఎప్పుడు వేసుకోవాలి?" : "When should I take my medicine?";
       }
       isListening = false;
       store.notify();
@@ -236,5 +229,6 @@ window.toggleSpeechMic = () => {
 
 window.speakAiMessage = (encodedText) => {
   const text = decodeURIComponent(encodedText);
-  speech.speak(text, 'te');
+  const lang = store.getState().currentLanguage;
+  speech.speak(text, lang || 'en');
 };
