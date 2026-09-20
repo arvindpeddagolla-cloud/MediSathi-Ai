@@ -1,0 +1,125 @@
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+import https from 'node:https';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DIST_DIR = path.join(__dirname, 'dist');
+
+const PORT = process.env.PORT || 10000;
+const ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || "";
+const AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN || "";
+const FROM_PHONE = process.env.TWILIO_PHONE_NUMBER || "+17372508034";
+const DEFAULT_TO = "+918106890663";
+
+const DEFAULT_SMS_BODY = 
+`Reminder: It’s time to take your scheduled medicine.
+Medicine: Paracetamol 500 mg
+Instruction: After food
+Please take it as prescribed by your doctor.`;
+
+const MIME_TYPES = {
+  '.html': 'text/html; charset=UTF-8',
+  '.js': 'application/javascript; charset=UTF-8',
+  '.css': 'text/css; charset=UTF-8',
+  '.json': 'application/json; charset=UTF-8',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.webp': 'image/webp',
+  '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
+  '.ttf': 'font/ttf'
+};
+
+const server = http.createServer((req, res) => {
+  // Handle Twilio SMS API
+  if (req.url === '/api/send-sms' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      let payload = {};
+      try {
+        payload = JSON.parse(body || '{}');
+      } catch (e) {}
+
+      const toPhone = payload.to || DEFAULT_TO;
+      const msgBody = payload.body || DEFAULT_SMS_BODY;
+
+      const postData = new URLSearchParams({
+        To: toPhone,
+        From: FROM_PHONE,
+        Body: msgBody
+      }).toString();
+
+      const auth = Buffer.from(`${ACCOUNT_SID}:${AUTH_TOKEN}`).toString('base64');
+
+      const twilioReq = https.request({
+        hostname: 'api.twilio.com',
+        path: `/2010-04-01/Accounts/${ACCOUNT_SID}/Messages.json`,
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${auth}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': Buffer.byteLength(postData)
+        }
+      }, (twilioRes) => {
+        let twilioBody = '';
+        twilioRes.on('data', d => { twilioBody += d; });
+        twilioRes.on('end', () => {
+          res.setHeader('Content-Type', 'application/json');
+          res.statusCode = twilioRes.statusCode || 200;
+          res.end(twilioBody);
+        });
+      });
+
+      twilioReq.on('error', (err) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.statusCode = 500;
+        res.end(JSON.stringify({ error: err.message }));
+      });
+
+      twilioReq.write(postData);
+      twilioReq.end();
+    });
+    return;
+  }
+
+  // Serve static files from dist/
+  let reqPath = req.url.split('?')[0];
+  if (reqPath === '/') reqPath = '/index.html';
+
+  let filePath = path.join(DIST_DIR, reqPath);
+  
+  // Safe path check
+  if (!filePath.startsWith(DIST_DIR)) {
+    res.statusCode = 403;
+    return res.end('Forbidden');
+  }
+
+  fs.stat(filePath, (err, stats) => {
+    if (err || !stats.isFile()) {
+      // SPA Fallback to index.html
+      filePath = path.join(DIST_DIR, 'index.html');
+    }
+
+    const ext = path.extname(filePath).toLowerCase();
+    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+
+    fs.readFile(filePath, (readErr, content) => {
+      if (readErr) {
+        res.statusCode = 500;
+        return res.end('Error loading file');
+      }
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content);
+    });
+  });
+});
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`MediSathi AI production server listening on http://0.0.0.0:${PORT}`);
+});
