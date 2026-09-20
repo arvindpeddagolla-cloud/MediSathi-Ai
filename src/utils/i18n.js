@@ -180,6 +180,18 @@ export const translations = {
     smsBody: "It is time to take your scheduled medicine.\n\nParacetamol 500 mg\nAfter food.",
     smsReplyTaken: "Reply 1: Taken",
     smsReplyLater: "Reply 2: Remind Later",
+
+    // Login & Profile
+    loginTitle: "Welcome to MediSathi AI",
+    loginSubtitle: "Your personalized multilingual healthcare companion",
+    fullName: "Full Name",
+    contactNumber: "Contact Mobile Number",
+    emailAddress: "Email Address",
+    signInBtn: "Sign In & Continue",
+    demoLoginBtn: "⚡ Instant Demo Sign In (Arvind)",
+    logoutBtn: "Logout",
+    selectLanguage: "Select Language",
+    phoneSmsNotice: "Used for real-time Twilio SMS & Voice alerts",
   },
 
   te: {
@@ -361,6 +373,18 @@ export const translations = {
     smsBody: "మీరు నిర్ణీత మందు వేసుకునే సమయం అయింది.\n\nపారాసిటమాల్ 500 mg\nఆహారం తర్వాత.",
     smsReplyTaken: "సమాధానం 1: వేసుకున్నాను",
     smsReplyLater: "సమాధానం 2: తర్వాత గుర్తుచేయి",
+
+    // Login & Profile
+    loginTitle: "మెడిసాథి AI కి స్వాగతం",
+    loginSubtitle: "మీ వ్యక్తిగతీకరించిన ఆరోగ్య సహచరుడు",
+    fullName: "పూర్తి పేరు",
+    contactNumber: "మొబైల్ నంబర్",
+    emailAddress: "ఈమెయిల్ చిరునామా",
+    signInBtn: "లాగిన్ అవ్వండి",
+    demoLoginBtn: "⚡ డెమో లాగిన్ (అరవింద్)",
+    logoutBtn: "లాగౌట్",
+    selectLanguage: "భాషను ఎంచుకోండి",
+    phoneSmsNotice: "రియల్ టైమ్ SMS & వాయిస్ అలర్ట్‌ల కోసం ఉపయోగించబడుతుంది",
   },
 
   hi: {
@@ -530,6 +554,18 @@ export const translations = {
     smsBody: "आपकी निर्धारित दवा लेने का समय हो गया है।\n\nपैरासिटामोल 500 mg\nभोजन के बाद।",
     smsReplyTaken: "उत्तर 1: ले ली",
     smsReplyLater: "उत्तर 2: बाद में याद दिलाएं",
+
+    // Login & Profile
+    loginTitle: "मेडिसाथी AI में आपका स्वागत है",
+    loginSubtitle: "आपका व्यक्तिगत स्वास्थ्य साथी",
+    fullName: "पूरा नाम",
+    contactNumber: "मोबाइल नंबर",
+    emailAddress: "ईमेल पता",
+    signInBtn: "साइन इन करें",
+    demoLoginBtn: "⚡ डेमो लॉगिन (अरविंद)",
+    logoutBtn: "लॉगआउट",
+    selectLanguage: "भाषा चुनें",
+    phoneSmsNotice: "रीयल-टाइम SMS और वॉइस अलर्ट के लिए उपयोग किया जाता है",
   },
 
   ta: {
@@ -699,6 +735,18 @@ export const translations = {
     smsBody: "உங்கள் திட்டமிடப்பட்ட மருந்தை உட்கொள்ளும் நேரம் வந்துவிட்டது.\n\nபாராசிட்டமால் 500 mg\nஉணவுக்குப் பின்.",
     smsReplyTaken: "பதில் 1: எடுத்துக்கொண்டேன்",
     smsReplyLater: "பதில் 2: பிறகு நினைவூட்டு",
+
+    // Login & Profile
+    loginTitle: "மெடிசாதி AI க்கு வரவேற்கிறோம்",
+    loginSubtitle: "உங்கள் தனிப்பயனாக்கப்பட்ட சுகாதார தோழன்",
+    fullName: "முழு பெயர்",
+    contactNumber: "மொபைல் எண்",
+    emailAddress: "மின்னஞ்சல் முகவரி",
+    signInBtn: "உள்நுழைய",
+    demoLoginBtn: "⚡ டெமோ உள்நுழைவு (அரவிந்த்)",
+    logoutBtn: "வெளியேறு",
+    selectLanguage: "மொழியைத் தேர்ந்தெடுக்கவும்",
+    phoneSmsNotice: "நிகழ்நேர SMS மற்றும் குரல் நினைவூட்டல்களுக்குப் பயன்படுகிறது",
   }
 };
 

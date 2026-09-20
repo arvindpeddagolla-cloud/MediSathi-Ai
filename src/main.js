@@ -7,6 +7,7 @@ import { showToast } from './components/Toast.js';
 import { speech } from './utils/speech.js';
 
 // Views
+import { renderLoginView } from './views/LoginView.js';
 import { renderHomeView } from './views/HomeView.js';
 import { renderMedicinesView } from './views/MedicinesView.js';
 import { renderHealthTrackView } from './views/HealthTrackView.js';
@@ -36,6 +37,60 @@ window.showToast = showToast;
 window.triggerMedicineReminder = triggerMedicineReminder;
 window.startDemoCountdown = startDemoCountdown;
 window.formatMedicineSms = formatMedicineSms;
+
+// Authentication Handlers
+window.handleLoginSubmit = () => {
+  const nameInput = document.getElementById('login-name');
+  const phoneInput = document.getElementById('login-phone');
+  const emailInput = document.getElementById('login-email');
+
+  const name = nameInput ? nameInput.value.trim() : 'Arvind';
+  const phone = phoneInput ? phoneInput.value.trim() : '+91 81068 90663';
+  const email = emailInput ? emailInput.value.trim() : 'arvind@medisathi.ai';
+
+  if (!name || !phone) {
+    showToast('Please provide your Name and Contact Number', 'error');
+    return;
+  }
+
+  store.loginUser({ name, phone, email });
+  speech.playChime('success');
+  showToast(`✓ Welcome ${name}! Logged in successfully.`, 'success', 3500);
+
+  setTimeout(() => {
+    const lang = store.state.currentLanguage;
+    if (lang === 'te') {
+      speech.speak(`నమస్కారం ${name} గారు, మెడిసాథి AI కి స్వాగతం. మీ ఆరోగ్య సహచరుడు సిద్ధంగా ఉంది.`, 'te');
+    } else {
+      speech.speak(`Welcome ${name} to MediSathi AI. Your health companion is ready.`, 'en');
+    }
+  }, 300);
+};
+
+window.handleQuickDemoLogin = () => {
+  store.loginUser({
+    name: 'Arvind',
+    phone: '+91 81068 90663',
+    email: 'arvind@medisathi.ai'
+  });
+  speech.playChime('success');
+  showToast('✓ Demo Login as Arvind (+91 81068 90663) successful!', 'success', 3500);
+
+  setTimeout(() => {
+    const lang = store.state.currentLanguage;
+    if (lang === 'te') {
+      speech.speak(`నమస్కారం అరవింద్ గారు, మెడిసాథి AI కి స్వాగతం.`, 'te');
+    } else {
+      speech.speak(`Welcome Arvind to MediSathi AI.`, 'en');
+    }
+  }, 300);
+};
+
+window.handleLogout = () => {
+  store.logoutUser();
+  speech.playChime('reminder');
+  showToast('Logged out of MediSathi AI.', 'info', 2500);
+};
 
 // Start active background timing scheduler
 startActiveScheduler();
@@ -188,6 +243,32 @@ window.toggleHomeVoiceWave = () => {
 function renderApp(state) {
   const root = document.getElementById('app-root');
   if (!root) return;
+
+  // If user is not logged in, render the Login Screen
+  if (!state.isLoggedIn) {
+    root.innerHTML = `
+      <!-- Top Demo Toolbar for Testing & Judge Presentations -->
+      ${renderDemoControls(state)}
+
+      <!-- Android Phone Simulator Container -->
+      <div class="relative w-full max-w-[412px] h-[100dvh] sm:h-[860px] sm:max-h-[94vh] flex flex-col bg-surface sm:rounded-[44px] sm:border-[10px] sm:border-slate-900 sm:ring-1 sm:ring-slate-700/60 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden select-none">
+        
+        <!-- Android Hardware Camera Punch Hole & Speaker Grille -->
+        <div class="hidden sm:block absolute top-2.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-slate-950 ring-1 ring-slate-800 pointer-events-none z-40"></div>
+        <div class="hidden sm:block absolute top-1 left-1/2 -translate-x-1/2 w-12 h-1 rounded-full bg-slate-800/80 pointer-events-none z-40"></div>
+        
+        <!-- Subtle Side Hardware Buttons -->
+        <div class="hidden sm:block android-power-button"></div>
+        <div class="hidden sm:block android-volume-button"></div>
+
+        <!-- Scrollable Login Content Container -->
+        <main class="w-full flex-1 bg-surface overflow-y-auto overscroll-contain overflow-x-hidden no-scrollbar relative flex flex-col">
+          ${renderLoginView(state)}
+        </main>
+      </div>
+    `;
+    return;
+  }
 
   // Choose active view based on state
   let viewHtml = '';

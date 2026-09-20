@@ -8,6 +8,16 @@ export function renderDemoControls(state) {
       <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
         <span class="text-slate-400 font-bold uppercase tracking-wider text-[10px] mr-0.5 shrink-0">Demo:</span>
         
+        <!-- Login / Logout State Toggle -->
+        <button 
+          onclick="${state.isLoggedIn ? 'window.handleLogout()' : 'window.handleQuickDemoLogin()'}" 
+          class="px-2 py-1 rounded-lg ${state.isLoggedIn ? 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30' : 'bg-emerald-500 text-white font-extrabold shadow-sm'} text-[11px] font-bold flex items-center gap-1 shrink-0 active:scale-95 transition-all cursor-pointer"
+          title="${state.isLoggedIn ? 'Logout from current session' : 'Sign In as Arvind'}"
+        >
+          <span class="material-symbols-outlined text-[13px]">${state.isLoggedIn ? 'logout' : 'login'}</span>
+          <span>${state.isLoggedIn ? 'Logout' : 'Login'}</span>
+        </button>
+
         <!-- Create Reminder Shortcut -->
         <button 
           onclick="window.openCreateReminderModal()" 

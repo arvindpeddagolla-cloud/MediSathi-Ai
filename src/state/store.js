@@ -1,15 +1,23 @@
 // Global Reactive State Store for MediSathi AI with Full Interactivity & Calendar History
 
+const savedLogin = typeof localStorage !== 'undefined' ? localStorage.getItem('medisathi_logged_in') === 'true' : false;
+const savedName = typeof localStorage !== 'undefined' ? (localStorage.getItem('medisathi_user_name') || 'Arvind') : 'Arvind';
+const savedPhone = typeof localStorage !== 'undefined' ? (localStorage.getItem('medisathi_user_phone') || '+91 81068 90663') : '+91 81068 90663';
+const savedEmail = typeof localStorage !== 'undefined' ? (localStorage.getItem('medisathi_user_email') || 'arvind@medisathi.ai') : 'arvind@medisathi.ai';
+
 class Store {
   constructor() {
     this.state = {
+      isLoggedIn: savedLogin, // Controlled by login flow
       currentLanguage: 'en', // 'en' | 'te' | 'hi' | 'ta'
       activeTab: 'home', // 'home' | 'medicines' | 'health' | 'reports' | 'ai' | 'profile'
       activeModal: null, // null | 'scanner' | 'reminder' | 'sms' | 'voiceCall' | 'profile' | 'medDetails' | 'calendarPicker' | 'vitalLogger'
       
       // Patient Info
       patient: {
-        name: "Arvind",
+        name: savedName,
+        phone: savedPhone,
+        email: savedEmail,
         age: 68,
         gender: "Male",
         bloodGroup: "O+",
@@ -230,8 +238,43 @@ class Store {
     this.listeners.forEach(fn => fn(this.state));
   }
 
+  loginUser(credentials = {}) {
+    const name = credentials.name || this.state.patient.name || 'Arvind';
+    const phone = credentials.phone || this.state.patient.phone || '+91 81068 90663';
+    const email = credentials.email || this.state.patient.email || 'arvind@medisathi.ai';
+
+    this.state.isLoggedIn = true;
+    this.state.patient.name = name;
+    this.state.patient.phone = phone;
+    this.state.patient.email = email;
+
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('medisathi_logged_in', 'true');
+      localStorage.setItem('medisathi_user_name', name);
+      localStorage.setItem('medisathi_user_phone', phone);
+      localStorage.setItem('medisathi_user_email', email);
+    }
+
+    this.notify();
+  }
+
+  logoutUser() {
+    this.state.isLoggedIn = false;
+    this.state.activeModal = null;
+    this.state.activeTab = 'home';
+
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('medisathi_logged_in', 'false');
+    }
+
+    this.notify();
+  }
+
   setLanguage(lang) {
     this.state.currentLanguage = lang;
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('medisathi_lang', lang);
+    }
     this.notify();
   }
 

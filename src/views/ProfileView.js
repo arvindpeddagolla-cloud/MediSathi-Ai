@@ -12,26 +12,57 @@ export function renderProfileView(state) {
     <div class="flex flex-col w-full px-4 py-3 space-y-3.5 view-enter">
       
       <!-- Profile Header Card -->
-      <div class="rounded-2xl bg-surface-container-lowest p-3.5 shadow-xs border border-surface-container-high/60 flex items-center gap-3">
-        <div class="relative shrink-0">
-          <img 
-            alt="${patient.name}" 
-            class="w-14 h-14 rounded-full object-cover ring-3 ring-primary/20 shadow-sm" 
-            src="${patient.avatarUrl}"
-          />
-          <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-tertiary border-2 border-white rounded-full"></span>
+      <div class="rounded-2xl bg-surface-container-lowest p-3.5 shadow-xs border border-surface-container-high/60 flex flex-col space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="relative shrink-0">
+            <img 
+              alt="${patient.name}" 
+              class="w-14 h-14 rounded-full object-cover ring-3 ring-primary/20 shadow-sm" 
+              src="${patient.avatarUrl}"
+            />
+            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-tertiary border-2 border-white rounded-full"></span>
+          </div>
+
+          <div class="flex flex-col min-w-0 flex-1">
+            <div class="flex items-center justify-between">
+              <h1 class="text-[18px] font-extrabold text-on-surface leading-tight truncate">${patient.name}</h1>
+              <span class="px-2 py-0.2 rounded-full bg-primary-fixed text-primary text-[9px] font-bold">Patient</span>
+            </div>
+            <p class="text-[11px] text-on-surface-variant font-medium">${patient.age} Yrs • ${patient.gender} • Blood: <strong class="text-primary">${patient.bloodGroup}</strong></p>
+            <span class="text-[10px] text-tertiary font-bold flex items-center gap-1 mt-0.5">
+              <span class="material-symbols-outlined text-[12px]">verified</span> Active Health Monitoring
+            </span>
+          </div>
         </div>
 
-        <div class="flex flex-col min-w-0 flex-1">
+        <!-- Contact Phone & Email Details -->
+        <div class="p-2.5 rounded-xl bg-surface-container-low border border-surface-container-high/40 space-y-1.5 text-xs">
           <div class="flex items-center justify-between">
-            <h1 class="text-[18px] font-extrabold text-on-surface leading-tight truncate">${patient.name}</h1>
-            <span class="px-2 py-0.2 rounded-full bg-primary-fixed text-primary text-[9px] font-bold">Patient</span>
+            <span class="text-on-surface-variant flex items-center gap-1">
+              <span class="material-symbols-outlined text-[15px] text-tertiary">phone_android</span>
+              <span>Mobile:</span>
+            </span>
+            <strong class="text-on-surface font-bold">${patient.phone || '+91 81068 90663'}</strong>
           </div>
-          <p class="text-[11px] text-on-surface-variant font-medium">${patient.age} Yrs • ${patient.gender} • Blood Group: <strong class="text-primary">${patient.bloodGroup}</strong></p>
-          <span class="text-[10px] text-tertiary font-bold flex items-center gap-1 mt-0.5">
-            <span class="material-symbols-outlined text-[12px]">verified</span> Active Health Monitoring
-          </span>
+
+          <div class="flex items-center justify-between">
+            <span class="text-on-surface-variant flex items-center gap-1">
+              <span class="material-symbols-outlined text-[15px] text-secondary">mail</span>
+              <span>Email:</span>
+            </span>
+            <strong class="text-on-surface font-bold truncate max-w-[180px]">${patient.email || 'arvind@medisathi.ai'}</strong>
+          </div>
         </div>
+
+        <!-- Logout / Switch Account Button -->
+        <button 
+          type="button" 
+          class="w-full py-2 rounded-xl bg-error/10 hover:bg-error/20 text-error font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all border border-error/20 cursor-pointer"
+          onclick="window.handleLogout()"
+        >
+          <span class="material-symbols-outlined text-[16px]">logout</span>
+          <span>${t('logoutBtn', lang)} / Switch Profile</span>
+        </button>
       </div>
 
       <!-- Caregiver Support Section (Mandatory Requirement) -->
