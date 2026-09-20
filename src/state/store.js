@@ -316,6 +316,37 @@ class Store {
     }
   }
 
+  addCustomScheduleMedicine(data) {
+    const id = 'med-' + Date.now();
+    const time = data.time || '09:00 AM';
+    const slot = data.slot || 'Morning';
+    const instruction = data.instruction || 'After food';
+    const instructionTe = data.instructionTe || (instruction.includes('Before') ? 'ఆహారానికి ముందు' : 'ఆహారం తర్వాత');
+    
+    const newMed = {
+      id: id,
+      name: data.name || 'Amoxicillin',
+      brand: data.brand || 'Prescribed Medication',
+      strength: data.strength || '500 mg',
+      time: time,
+      slot: slot,
+      instruction: instruction,
+      instructionTe: instructionTe,
+      instructionHi: data.instructionHi || 'भोजन के बाद',
+      instructionTa: data.instructionTa || 'உணவுக்குப் பின்',
+      purpose: data.purpose || 'Doctor Prescribed Antibiotic / Care Treatment',
+      purposeTe: data.purposeTe || 'వైద్యులు సూచించిన చికిత్స',
+      doctor: data.doctor || 'Dr. K. S. Rao, MD',
+      status: 'unconfirmed',
+      loggedTime: null,
+      imageUrl: data.imageUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuC17ArVOML7jZr9gKaKW2mALa6YnORcvJGdHSWaMRHCR1T1Taxrnpiob3Ej_UJBY0rFKAqjwZ5Vp80VJlQ2y9BiilY8KFBkSR-3hk3Wv7wxwnvsNG6LQK_l38Y1u_gadWflS_w_qprUUgvRqiAqTHwlzrAIhOUOc0Yu-4r910yih2OwpLF2iBMqt-AnANrDIPHvILY6K23dFtHvFKotFuA_PdFUh8poO1vya3a00PW-bNkGHvmFBv0s'
+    };
+
+    this.state.medications.unshift(newMed);
+    this.notify();
+    return newMed;
+  }
+
   addPrescriptionMedicine(medicine) {
     const newMed = {
       id: 'med-' + Date.now(),
